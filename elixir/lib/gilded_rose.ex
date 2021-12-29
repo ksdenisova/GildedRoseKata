@@ -7,12 +7,14 @@ defmodule GildedRose do
     Enum.map(items, &update_item/1)
   end
 
-  def update_item(item) do
+  def update_item(%Item{name: "Sulfuras, Hand of Ragnaros"} = item), do: item
+
+  def update_item(%Item{name: name} = item) do
     item = cond do
-      item.name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" ->
+      name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" ->
         if item.quality > 0 do
-          if item.name != "Sulfuras, Hand of Ragnaros" do
-            %{item | quality: item.quality - 1}
+          if name != "Sulfuras, Hand of Ragnaros" do
+            decrease_quality(item)
           else
             item
           end
@@ -22,14 +24,14 @@ defmodule GildedRose do
       true ->
         cond do
           item.quality < 50 ->
-            item = %{item | quality: item.quality + 1}
+            item = increase_quality(item)
             cond do
               item.name == "Backstage passes to a TAFKAL80ETC concert" ->
                 item = cond do
                   item.sell_in < 11 ->
                     cond do
                       item.quality < 50 ->
-                        %{item | quality: item.quality + 1}
+                        increase_quality(item)
                       true -> item
                     end
                   true -> item
@@ -38,7 +40,7 @@ defmodule GildedRose do
                   item.sell_in < 6 ->
                     cond do
                       item.quality < 50 ->
-                        %{item | quality: item.quality + 1}
+                        increase_quality(item)
                       true -> item
                     end
                   true -> item
@@ -48,36 +50,54 @@ defmodule GildedRose do
           true -> item
         end
     end
+
     item = cond do
-      item.name != "Sulfuras, Hand of Ragnaros" ->
-        %{item | sell_in: item.sell_in - 1}
+      name != "Sulfuras, Hand of Ragnaros" ->
+        decrease_sell_in(item)
       true -> item
     end
+
     cond do
       item.sell_in < 0 ->
         cond do
-          item.name != "Aged Brie" ->
+          name != "Aged Brie" ->
             cond do
-              item.name != "Backstage passes to a TAFKAL80ETC concert" ->
+              name != "Backstage passes to a TAFKAL80ETC concert" ->
                 cond do
                   item.quality > 0 ->
                     cond do
                       item.name != "Sulfuras, Hand of Ragnaros" ->
-                        %{item | quality: item.quality - 1}
+                        decrease_quality(item)
                       true -> item
                     end
                   true -> item
                 end
-              true -> %{item | quality: item.quality - item.quality}
+              true -> drop_quality(item)
             end
           true ->
             cond do
               item.quality < 50 ->
-                %{item | quality: item.quality + 1}
+                increase_quality(item)
               true -> item
             end
         end
       true -> item
     end
+  end
+
+  defp increase_quality(%Item{quality: quality} = item) do
+    %Item{item | quality: quality + 1}
+  end
+
+  defp decrease_quality(%Item{quality: quality} = item) do
+    %Item{item | quality: quality - 1}
+  end
+
+  defp drop_quality(%Item{quality: quality} = item) do
+    %Item{item | quality: 0}
+  end
+
+  defp decrease_sell_in(%Item{sell_in: sell_in} = item) do
+    %Item{item | sell_in: sell_in - 1}
   end
 end
