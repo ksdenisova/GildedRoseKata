@@ -2,6 +2,8 @@ defmodule GildedRoseTest do
   use ExUnit.Case
   use ExUnit.Parameterized
 
+  alias Item.Item
+
   test "begin the journey of refactoring" do
     items = [%Item{name: "foo", sell_in: 0, quality: 0}]
     GildedRose.update_quality(items)
