@@ -37,19 +37,19 @@ defmodule GildedRoseTest do
   end
 
   test_with_params "the quality of an item should not be negative",
-      fn (sell_in, quality, expected_quality) ->
-        item = %Item{name: "test_item", sell_in: sell_in, quality: quality}
-            |> GildedRose.update_item
+    fn (sell_in, quality, expected_quality) ->
+      item = %Item{name: "test_item", sell_in: sell_in, quality: quality}
+              |> GildedRose.update_item
 
-        assert item.quality == expected_quality
-      end do
-        [
-          {5, 10, 9},
-          {2, 0, 0},
-          {3, 1, 0},
-          {0, 1, 0},
-        ]
-    end
+      assert item.quality == expected_quality
+    end do
+      [
+        {5, 10, 9},
+        {2, 0, 0},
+        {3, 1, 0},
+        {0, 1, 0},
+      ]
+  end
 
   test "the item 'Aged Brie' increases in quality the older it gets" do
     quality = 15
@@ -72,19 +72,19 @@ defmodule GildedRoseTest do
   end
 
   test_with_params "the quality of item 'Aged Brie' stops increase if it reached 50",
-      fn (quality, expected_quality) ->
-        item = %Item{name: "Aged Brie", sell_in: 15, quality: quality}
-            |> GildedRose.update_item
+    fn (quality, expected_quality) ->
+      item = %Item{name: "Aged Brie", sell_in: 15, quality: quality}
+              |> GildedRose.update_item
 
-        assert item.quality == expected_quality
-      end do
-        [
-          {49, 50},
-          {50, 50},
-          {51, 51},
-          {100, 100},
-        ]
-    end
+      assert item.quality == expected_quality
+    end do
+      [
+        {49, 50},
+        {50, 50},
+        {51, 51},
+        {100, 100},
+      ]
+  end
 
   test "the quality of item 'Sulfuras...' is never changes" do
     quality = 50
@@ -117,36 +117,36 @@ defmodule GildedRoseTest do
   end
 
   test_with_params "the quality of item 'Backstage passes...' increases by two when there are 10 days or less",
-      fn (quality, sell_in) ->
-        item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in, quality: quality}
-            |> GildedRose.update_item
+    fn (quality, sell_in) ->
+      item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in, quality: quality}
+              |> GildedRose.update_item
 
-        expected_quality = quality + 2
+      expected_quality = quality + 2
 
-        assert item.quality == expected_quality
-      end do
-        [
-          {47, 10},
-          {12, 7}
-        ]
-    end
+      assert item.quality == expected_quality
+    end do
+      [
+        {47, 10},
+        {12, 7}
+      ]
+  end
 
-    test_with_params "the quality of item 'Backstage passes...' increases by three when there are 5 days or less",
-      fn (quality, sell_in) ->
-        item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in, quality: quality}
-            |> GildedRose.update_item
+  test_with_params "the quality of item 'Backstage passes...' increases by three when there are 5 days or less",
+    fn (quality, sell_in) ->
+      item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: sell_in, quality: quality}
+              |> GildedRose.update_item
 
-        expected_quality = quality + 3
+      expected_quality = quality + 3
 
-        assert item.quality == expected_quality
-      end do
-        [
-          {47, 5},
-          {12, 2}
-        ]
-    end
+      assert item.quality == expected_quality
+    end do
+      [
+        {47, 5},
+        {12, 2}
+      ]
+  end
 
-    test "the quality of item 'Backstage passes...' drops to 0 after sell in days passed" do
+  test "the quality of item 'Backstage passes...' drops to 0 after sell in days passed" do
     item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 0, quality: 15}
             |> GildedRose.update_item
 
@@ -155,8 +155,8 @@ defmodule GildedRoseTest do
     assert item.quality == expected
   end
 
-  test "the quality of item 'Backstage passes...' does not increase after it reaches 50" do
-    item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 5, quality: 50}
+  test "the quality of item 'Backstage passes...' does not increase after it reaches 50 even with applied rules" do
+    item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 10, quality: 49}
             |> GildedRose.update_item
 
     expected = 50
