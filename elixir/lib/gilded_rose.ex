@@ -13,11 +13,7 @@ defmodule GildedRose do
     item = cond do
       name != "Aged Brie" && item.name != "Backstage passes to a TAFKAL80ETC concert" ->
         if item.quality > 0 do
-          if name != "Sulfuras, Hand of Ragnaros" do
-            decrease_quality(item)
-          else
-            item
-          end
+          decrease_quality(item)
         else
           item
         end
@@ -51,11 +47,7 @@ defmodule GildedRose do
         end
     end
 
-    item = cond do
-      name != "Sulfuras, Hand of Ragnaros" ->
-        decrease_sell_in(item)
-      true -> item
-    end
+    item = decrease_sell_in(item)
 
     cond do
       item.sell_in < 0 ->
@@ -65,11 +57,7 @@ defmodule GildedRose do
               name != "Backstage passes to a TAFKAL80ETC concert" ->
                 cond do
                   item.quality > 0 ->
-                    cond do
-                      item.name != "Sulfuras, Hand of Ragnaros" ->
-                        decrease_quality(item)
-                      true -> item
-                    end
+                    decrease_quality(item)
                   true -> item
                 end
               true -> drop_quality(item)
