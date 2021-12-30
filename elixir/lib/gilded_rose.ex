@@ -26,6 +26,13 @@ defmodule GildedRose do
     |> Modifier.increase_quality()
   end
 
+  def update_item(%Item{name: "Conjured"} = item) do
+    item
+    |> Modifier.decrease_sell_in()
+    |> Modifier.decrease_quality()
+    |> Modifier.decrease_quality()
+  end
+
   def update_item(%Item{} = item) do
     item
     |> Modifier.decrease_sell_in()
