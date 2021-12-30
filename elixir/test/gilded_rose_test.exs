@@ -73,7 +73,7 @@ defmodule GildedRoseTest do
     assert item.quality == expected
   end
 
-  test_with_params "the quality of item 'Aged Brie' stops increase if it reached 50",
+  test_with_params "the quality of item 'Aged Brie' stops increase if it has reached 50",
     fn (quality, expected_quality) ->
       item = %Item{name: "Aged Brie", sell_in: 15, quality: quality}
               |> GildedRose.update_item
@@ -83,8 +83,8 @@ defmodule GildedRoseTest do
       [
         {49, 50},
         {50, 50},
-        {51, 51},
-        {100, 100},
+        {51, 50},
+        {100, 50}
       ]
   end
 
@@ -110,7 +110,7 @@ defmodule GildedRoseTest do
 
   test "the quality of item 'Backstage passes...' increases by one when sell in more then 10 days" do
     quality = 16
-    item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 11, quality: quality}
+    item = %Item{name: "Backstage passes to a TAFKAL80ETC concert", sell_in: 12, quality: quality}
             |> GildedRose.update_item
 
     expected = quality + 1
