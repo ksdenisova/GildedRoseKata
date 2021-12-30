@@ -14,7 +14,7 @@ defmodule GildedRose do
 
   def update_item(%Item{name: "Backstage passes to a TAFKAL80ETC concert"} = item) do
     item = Modifier.decrease_sell_in(item)
-    value = Modifier.increase_value(item)
+    value = Modifier.increase_by_value(item)
 
     item
     |> Modifier.increase_quality(value)

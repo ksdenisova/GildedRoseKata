@@ -37,7 +37,7 @@ defmodule Item.Modifier do
     %Item{item | sell_in: sell_in - 1}
   end
 
-  def increase_value(%Item{sell_in: sell_in}) do
+  def increase_by_value(%Item{sell_in: sell_in}) do
     case sell_in do
       sell_in when sell_in < 0 -> 0
       sell_in when sell_in <= 5 -> 3
